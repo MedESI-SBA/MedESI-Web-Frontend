@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Bg from "../../assets/bg.svg";
 import axios from "../../lib/api";
 import { useAuth } from "../../providers/AuthContext";
+import getCookie from "../../utils/getCookie";
 
 const Hero = ({ showLogin, setShowLogin }) => {
   const [email, setEmail] = useState("");
@@ -27,10 +28,13 @@ const Hero = ({ showLogin, setShowLogin }) => {
     };
   }, [showLogin]);
 
+
+
   const handleLogin = async () => {
     if (isSubmitting) return;
     try {
       setIsSubmitting(true);
+      await axios.get("/sanctum/csrf-cookie");
       const response = await axios.post("/api/login", {
         email: email,
         password: password,
